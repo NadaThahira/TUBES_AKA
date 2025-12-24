@@ -153,11 +153,16 @@ if st.button("🚀 Jalankan Analisis"):
     
     st.markdown(f"""
     <div class="analysis-card">
-        <h4>1. Efisiensi Waktu Real-time</h4>
-        <p>Pada pengujian bilangan <b>{n}</b>, metode <b>{pemenang}</b> selesai lebih cepat. 
-        Meskipun keduanya memiliki kompleksitas <b>O(n)</b>, rekursi cenderung lebih lambat karena proses <i>overhead stack</i>.</p>
-        <h4>2. Kesimpulan Grafik</h4>
-        <p>Garis <b>Biru (Rekursif)</b> dan <b>Pink (Iteratif)</b> menunjukkan pertumbuhan waktu yang linier. 
-        Tabel di atas merinci bahwa semakin besar nilai n, semakin nyata beban kerja yang ditanggung sistem.</p>
+        <h4>1. Perbandingan Waktu Eksekusi</h4>
+        <p>Berdasarkan pengujian nyata dengan n = {n}, algoritma <b>{pemenang}</b> terbukti lebih unggul.</p>
+        
+        <h4>2. Mengapa Iteratif Lebih Unggul pada n Besar?</h4>
+        <ul>
+            <li><b>Efisiensi Memori:</b> Algoritma <b>Iteratif</b> hanya menggunakan satu blok memori untuk melakukan perulangan, sehingga waktu eksekusinya tetap stabil dan <b>cenderung lebih kecil/cepat saat n terus bertambah.</b></li>
+            <li><b>Beban Rekursi (Overhead):</b> Sebaliknya, <b>Rekursif</b> harus membuat "tumpukan" (stack) fungsi baru setiap kali memanggil dirinya sendiri. Pada nilai n yang besar, proses manajemen stack ini memakan waktu tambahan yang signifikan (overhead), sehingga grafiknya akan cenderung naik lebih tajam.</li>
+        </ul>
+
+        <h4>3. Batas Komputasi</h4>
+        <p>Pada nilai n yang sangat besar (misal n > 1000), algoritma Rekursif berisiko mengalami <i>Recursion Error</i> (Stack Overflow), sedangkan Iteratif akan terus berjalan dengan aman. Oleh karena itu, untuk penggunaan praktis dalam pengolahan data besar, metode <b>Iteratif</b> adalah pilihan yang lebih optimal.</p>
     </div>
     """, unsafe_allow_html=True)
