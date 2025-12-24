@@ -149,8 +149,8 @@ if st.button("🚀 Jalankan Analisis"):
         waktu_rek_list.append(time.time() - t1)
 
     fig, ax = plt.subplots(figsize=(8, 4))
-    ax.plot(input_sizes, waktu_rek_list, marker="o", label="Rekursif", color='#1E3A8A', linewidth=2)
-    ax.plot(input_sizes, waktu_iter_list, marker="o", label="Iteratif", color='#880E4F', linewidth=2)
+    ax.plot(input_sizes, waktu_rek_list, marker="o", label="Rekursif", color='#3B82F6', linewidth=2)
+    ax.plot(input_sizes, waktu_iter_list, marker="o", label="Iteratif", color='#D81B60', linewidth=2)
     
     ax.set_xlabel("Ukuran Input (n)")
     ax.set_ylabel("Waktu (detik)")
