@@ -140,16 +140,15 @@ if st.button("🚀 Jalankan Analisis"):
     # Perbaikan blok HTML Analysis
     html_content = f"""
     <div style="background-color: #262730; padding: 20px; border-radius: 10px; border-left: 5px solid #FF4B4B;">
-        <h4 style="color: white; margin-top: 0;">1. Mana yang Lebih Cepat?</h4>
+        <h4 style="color: white; margin-top: 0;">1. Manakah yang memiliki waktu eksekusi lebih cepat?</h4>
         <p style="color: #E0E0E0;">{pesan_performa}</p>
-        <h4 style="color: white;">2. Mengapa Hasilnya Berbeda?</h4>
-        <p style="color: #E0E0E0;">Analogi Tangga:</p>
+        <h4 style="color: white;">2. Apa penyebab perbedaan hasil yang diperoleh?</h4>
         <ul style="color: #E0E0E0;">
-            <li><b style="color: #EC4899;">Iteratif:</b> Mandiri dan stabil di setiap langkah.</li>
-            <li><b style="color: #3B82F6;">Rekursif:</b> Memanggil bantuan di setiap langkah (overhead memori).</li>
+            <li><b style="color: #EC4899;">Iteratif:</b> Proses berjalan langsung dengan perulangan.</li>
+            <li><b style="color: #3B82F6;">Rekursif:</b> Proses berjalan dengan pemanggilan fungsi berulang sehingga membutuhkan lebih banyak memori.</li>
         </ul>
         <h4 style="color: white;">3. Kesimpulan</h4>
-        <p style="color: #E0E0E0;">Garis <b style="color: #3B82F6;">Biru (Rekursif)</b> cenderung naik lebih tajam karena beban komputasi tambahan.</p>
+        <p style="color: #E0E0E0;">Garis <b style="color: #3B82F6;">Biru (Rekursif)</b> cenderung meningkat lebih tajam karena memerlukan proses tambahan.</p>
     </div>
     """
     st.markdown(html_content, unsafe_allow_html=True)
