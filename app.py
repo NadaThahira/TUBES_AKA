@@ -7,27 +7,51 @@ import matplotlib.pyplot as plt
 # ==================================================
 st.set_page_config(page_title="Analisis Algoritma", layout="centered")
 
-# CSS Custom untuk memperbesar font label metrik dan mengatur gaya kotak
+# CSS Custom untuk mempertegas tulisan dan warna
 st.markdown("""
     <style>
+    /* Memperbesar dan mempertegas label metrik waktu */
     [data-testid="stMetricLabel"] {
-        font-size: 1.3rem !important;
-        font-weight: bold !important;
-        color: #31333F;
+        font-size: 1.5rem !important;
+        font-weight: 800 !important;
+        color: #FF4B4B !important; /* Warna merah cerah agar sangat terlihat */
+        text-transform: uppercase;
     }
+    /* Memperbesar angka metrik waktu */
+    [data-testid="stMetricValue"] {
+        font-size: 2rem !important;
+        font-weight: bold !important;
+        color: #FFFFFF !important;
+    }
+    /* Styling kotak hasil penjumlahan */
     .result-box {
-        padding: 15px;
-        border-radius: 10px;
+        padding: 25px;
+        border-radius: 15px;
         text-align: center;
         margin-bottom: 10px;
+        border: 3px solid;
     }
     .rekursif-box {
-        background-color: #E1E8F0;
-        border: 1px solid #1E3A8A;
+        background-color: #1E3A8A; /* Biru Tua */
+        border-color: #3B82F6;
     }
     .iteratif-box {
-        background-color: #FCE4EC;
-        border: 1px solid #C13584;
+        background-color: #880E4F; /* Magenta Tua */
+        border-color: #C13584;
+    }
+    /* Style untuk teks REKURSIF/ITERATIF di dalam kotak */
+    .label-text {
+        margin: 0;
+        font-size: 1.8rem !important;
+        font-weight: 900 !important;
+        color: #FFFFFF !important;
+        letter-spacing: 2px;
+    }
+    .value-text {
+        margin: 0;
+        font-size: 3rem !important;
+        font-weight: bold !important;
+        color: #FFFFFF !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -47,7 +71,7 @@ def jumlah_faktor_genap_iteratif(n):
     return total
 
 def jumlah_faktor_genap_rekursif(n, i):
-    if i == 0:
+    if i <= 0:
         return 0
     if n % i == 0 and i % 2 == 0:
         return i + jumlah_faktor_genap_rekursif(n, i - 1)
@@ -79,23 +103,23 @@ if st.button("🚀 Jalankan Analisis"):
     with col_res1:
         st.markdown(f"""
             <div class="result-box rekursif-box">
-                <small>REKURSIF</small>
-                <h2 style="margin:0; color:#1E3A8A;">{hasil_rekursif}</h2>
+                <p class="label-text">REKURSIF</p>
+                <p class="value-text">{hasil_rekursif}</p>
             </div>
             """, unsafe_allow_html=True)
 
     with col_res2:
         st.markdown(f"""
             <div class="result-box iteratif-box">
-                <small>ITERATIF</small>
-                <h2 style="margin:0; color:#C13584;">{hasil_iteratif}</h2>
+                <p class="label-text">ITERATIF</p>
+                <p class="value-text">{hasil_iteratif}</p>
             </div>
             """, unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
 
     # ==================================================
-    # PERBANDINGAN WAKTU (LABEL DIPERBESAR)
+    # PERBANDINGAN WAKTU
     # ==================================================
     st.markdown("### ⏱️ Waktu Eksekusi")
     col1, col2, col3 = st.columns(3)
@@ -108,7 +132,7 @@ if st.button("🚀 Jalankan Analisis"):
         st.metric(label="Algoritma Rekursif", value=f"{waktu_rekursif:.6f} s")
 
     with col3:
-        st.metric(label="Selisih Waktu", value=f"{selisih:.6f} s")
+        st.metric(label="Selisih Waktu", value=f"{selisih:.8f} s")
 
     # ==================================================
     # GRAFIK ANALISIS
@@ -121,12 +145,10 @@ if st.button("🚀 Jalankan Analisis"):
     waktu_rek_list = []
 
     for ukuran in input_sizes:
-        # Benchmark Iteratif
         t0 = time.time()
         jumlah_faktor_genap_iteratif(ukuran)
         waktu_iter_list.append(time.time() - t0)
 
-        # Benchmark Rekursif
         t1 = time.time()
         jumlah_faktor_genap_rekursif(ukuran, ukuran)
         waktu_rek_list.append(time.time() - t1)
