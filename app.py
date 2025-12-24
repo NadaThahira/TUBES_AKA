@@ -139,10 +139,10 @@ if st.button("🚀 Jalankan Analisis"):
 
     # 5. ANALISIS
     st.markdown("### 🔍 Penjelasan Hasil Analisis")
-
+    
     # Menentukan siapa yang lebih cepat secara otomatis
     pemenang = "Iteratif" if waktu_iteratif < waktu_rekursif else "Rekursif"
-    
+
     # Pesan berdasarkan hasil hitungan
     if n < 50:
         pesan_performa = f"Untuk angka kecil seperti <b>{n}</b>, kedua cara ini sama-sama sangat cepat. Perbedaan waktunya sangat tipis sehingga hampir tidak terasa."
@@ -150,18 +150,18 @@ if st.button("🚀 Jalankan Analisis"):
         pesan_performa = f"Pada angka <b>{n}</b>, terlihat bahwa cara <b>{pemenang}</b> memberikan hasil yang lebih instan dibandingkan cara lainnya."
 
     st.markdown(f"""
-    <div class="analysis-card">
-        <h4>1. Mana yang Lebih Cepat?</h4>
-        <p>{pesan_performa}</p>
+    <div style="background-color: #262730; padding: 20px; border-radius: 10px; border-left: 5px solid #FF4B4B; margin-top: 10px;">
+        <h4 style="color: white; margin-top: 0;">1. Mana yang Lebih Cepat?</h4>
+        <p style="color: #E0E0E0;">{pesan_performa}</p>
         
-        <h4>2. Mengapa Hasilnya Berbeda?</h4>
-        <p>Bayangkan kita sedang menghitung tangga:</p>
-        <ul>
-            <li><b>Cara Pink (Iteratif):</b> Seperti orang yang langsung melangkah satu per satu hingga selesai. Cara ini sangat stabil dan efisien meski tangganya sangat tinggi.</li>
-            <li><b>Cara Biru (Rekursif):</b> Seperti orang yang memanggil temannya untuk melangkah, lalu temannya memanggil teman lain lagi. Untuk tangga pendek ini terlihat mudah, tapi jika tangganya sangat tinggi, proses "panggil-memanggil" ini membuat waktu tunggu jadi lebih lama.</li>
+        <h4 style="color: white;">2. Mengapa Hasilnya Berbeda?</h4>
+        <p style="color: #E0E0E0;">Bayangkan kita sedang menghitung tangga:</p>
+        <ul style="color: #E0E0E0;">
+            <li><b style="color: #EC4899;">Cara Pink (Iteratif):</b> Seperti orang yang melangkah sendiri secara mandiri. Cara ini sangat stabil dan efisien meski tangganya sangat tinggi.</li>
+            <li><b style="color: #3B82F6;">Cara Biru (Rekursif):</b> Seperti orang yang harus memanggil temannya dulu sebelum melangkah. Untuk tangga pendek ini terasa mudah, tapi jika tangganya tinggi, proses panggil-memanggil ini bikin waktu tunggu lebih lama.</li>
         </ul>
 
-        <h4>3. Kesimpulan dari Grafik</h4>
-        <p>Perhatikan tabel dan grafik di atas. Semakin besar angka yang Anda masukkan, garis <b>Biru (Rekursif)</b> biasanya akan mulai naik lebih tinggi di atas garis <b>Pink (Iteratif)</b>. Ini membuktikan bahwa cara <b>Iteratif</b> bekerja lebih ringan dan cepat saat menghadapi tugas yang berat.</p>
+        <h4 style="color: white;">3. Kesimpulan dari Grafik</h4>
+        <p style="color: #E0E0E0;">Perhatikan grafik di atas. Semakin besar angkanya, garis <b style="color: #3B82F6;">Biru</b> biasanya akan naik lebih tinggi dibanding garis <b style="color: #EC4899;">Pink</b>. Ini artinya cara Pink (Iteratif) bekerja lebih ringan dan cepat.</p>
     </div>
     """, unsafe_allow_html=True)
