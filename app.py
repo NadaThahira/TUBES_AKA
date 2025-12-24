@@ -3,24 +3,27 @@ import time
 import matplotlib.pyplot as plt
 import pandas as pd
 
+# ==================================================
 # KONFIGURASI HALAMAN
+# ==================================================
 st.set_page_config(page_title="Analisis Algoritma", layout="centered")
 
-# CSS Custom untuk mempertegas tulisan dan warna
+# Warna Terang yang Setone:
+# Rekursif: #3B82F6 (Blue 500)
+# Iteratif: #EC4899 (Pink 500)
+
 st.markdown("""
     <style>
     /* Memperbesar dan mempertegas label metrik waktu */
     [data-testid="stMetricLabel"] {
         font-size: 1.5rem !important;
         font-weight: 800 !important;
-        color: #FF4B4B !important; /* Warna merah cerah */
+        color: #FF4B4B !important; 
         text-transform: uppercase;
     }
-    /* Memperbesar angka metrik waktu */
     [data-testid="stMetricValue"] {
         font-size: 2rem !important;
         font-weight: bold !important;
-        color: #FFFFFF !important;
     }
     /* Styling kotak hasil penjumlahan */
     .result-box {
@@ -31,14 +34,13 @@ st.markdown("""
         border: 3px solid;
     }
     .rekursif-box {
-        background-color: #1E3A8A; /* Biru Tua */
-        border-color: #3B82F6;
+        background-color: #3B82F6; /* Biru Terang */
+        border-color: #60A5FA;
     }
     .iteratif-box {
-        background-color: #880E4F; /* Magenta Tua */
-        border-color: #C13584;
+        background-color: #EC4899; /* Pink Terang */
+        border-color: #F472B6;
     }
-    /* Style untuk teks REKURSIF/ITERATIF di dalam kotak */
     .label-text {
         margin: 0;
         font-size: 1.8rem !important;
@@ -66,7 +68,9 @@ st.title("📊 Analisis Kompleksitas Algoritma")
 st.subheader("Penjumlahan Faktor Genap (Iteratif vs Rekursif)")
 st.markdown("---")
 
+# ==================================================
 # ALGORITMA
+# ==================================================
 def jumlah_faktor_genap_iteratif(n):
     total = 0
     for i in range(1, n + 1):
@@ -82,12 +86,14 @@ def jumlah_faktor_genap_rekursif(n, i):
     else:
         return jumlah_faktor_genap_rekursif(n, i - 1)
 
+# ==================================================
 # INPUT USER
+# ==================================================
 st.markdown("### 🔢 Input Bilangan")
 n = st.number_input("Masukkan bilangan bulat positif:", min_value=1, step=1, value=10)
 
 if st.button("🚀 Jalankan Analisis"):
-    # Proses Hitung & Waktu
+    # 1. Eksekusi Utama
     start_iter = time.time()
     hasil_iteratif = jumlah_faktor_genap_iteratif(n)
     waktu_iteratif = time.time() - start_iter
@@ -96,47 +102,25 @@ if st.button("🚀 Jalankan Analisis"):
     hasil_rekursif = jumlah_faktor_genap_rekursif(n, n)
     waktu_rekursif = time.time() - start_rek
 
-    # TAMPILAN HASIL (REKURSIF | ITERATIF)
+    # 2. Tampilan Hasil (Box Berwarna)
     st.markdown("### 🏁 Hasil Penjumlahan")
     col_res1, col_res2 = st.columns(2)
-
     with col_res1:
-        st.markdown(f"""
-            <div class="result-box rekursif-box">
-                <p class="label-text">REKURSIF</p>
-                <p class="value-text">{hasil_rekursif}</p>
-            </div>
-            """, unsafe_allow_html=True)
-
+        st.markdown(f'<div class="result-box rekursif-box"><p class="label-text">REKURSIF</p><p class="value-text">{hasil_rekursif}</p></div>', unsafe_allow_html=True)
     with col_res2:
-        st.markdown(f"""
-            <div class="result-box iteratif-box">
-                <p class="label-text">ITERATIF</p>
-                <p class="value-text">{hasil_iteratif}</p>
-            </div>
-            """, unsafe_allow_html=True)
+        st.markdown(f'<div class="result-box iteratif-box"><p class="label-text">ITERATIF</p><p class="value-text">{hasil_iteratif}</p></div>', unsafe_allow_html=True)
 
-    st.markdown("<br>", unsafe_allow_html=True)
-
-    # PERBANDINGAN WAKTU
+    # 3. Metrik Waktu
     st.markdown("### ⏱️ Waktu Eksekusi")
     col1, col2, col3 = st.columns(3)
     selisih = abs(waktu_rekursif - waktu_iteratif)
+    with col1: st.metric(label="Algoritma Iteratif", value=f"{waktu_iteratif:.6f} s")
+    with col2: st.metric(label="Algoritma Rekursif", value=f"{waktu_rekursif:.6f} s")
+    with col3: st.metric(label="Selisih Waktu", value=f"{selisih:.8f} s")
 
-    with col1:
-        st.metric(label="Algoritma Iteratif", value=f"{waktu_iteratif:.6f} s")
-
-    with col2:
-        st.metric(label="Algoritma Rekursif", value=f"{waktu_rekursif:.6f} s")
-
-    with col3:
-        st.metric(label="Selisih Waktu", value=f"{selisih:.7f} s")
-
-    # GRAFIK ANALISIS
+    # 4. Pengumpulan Data untuk Grafik & Tabel
     st.markdown("---")
-    st.markdown("### 📈 Grafik Perbandingan Running Time")
-
-    # BAGIAN PENGUMPULAN DATA 
+    st.markdown("### 📈 Grafik & Tabel Performa")
     input_sizes = [1, 10, 20, 50, 100, 200, 500, 1000]
     data_points = []
 
@@ -149,27 +133,23 @@ if st.button("🚀 Jalankan Analisis"):
         jumlah_faktor_genap_rekursif(ukuran, ukuran)
         tr = time.time() - t1
         
-        # Menyimpan hasil ke dalam list
         data_points.append({"n": ukuran, "Iteratif (s)": ti, "Rekursif (s)": tr})
 
-    # Membuat DataFrame (PASTIKAN baris ini sejajar dengan 'for' di atas)
     df = pd.DataFrame(data_points)
 
+    # Render Grafik
     fig, ax = plt.subplots(figsize=(8, 4))
-    ax.plot(input_sizes, waktu_rek_list, marker="o", label="Rekursif", color='#3B82F6', linewidth=2)
-    ax.plot(input_sizes, waktu_iter_list, marker="o", label="Iteratif", color='#D81B60', linewidth=2)
-    
-    ax.set_xlabel("Ukuran Input (n)")
-    ax.set_ylabel("Waktu (detik)")
-    ax.legend()
-    ax.grid(True, linestyle='--', alpha=0.6)
-    
+    ax.plot(df["n"], df["Rekursif (s)"], marker="o", label="Rekursif", color='#3B82F6', linewidth=2)
+    ax.plot(df["n"], df["Iteratif (s)"], marker="o", label="Iteratif", color='#EC4899', linewidth=2)
+    ax.set_xlabel("Ukuran Input (n)"); ax.set_ylabel("Waktu (detik)"); ax.legend(); ax.grid(True, linestyle='--', alpha=0.5)
     st.pyplot(fig)
 
-    # Analisis Dinamis
+    # Render Tabel di bawah Grafik
+    st.table(df)
+
+    # 5. Analisis Dinamis
     st.markdown("### 🧠 Analisis Kompleksitas")
     pemenang = "Iteratif" if waktu_iteratif < waktu_rekursif else "Rekursif"
-    st.table(df)
     
     st.markdown(f"""
     <div class="analysis-card">
@@ -181,4 +161,3 @@ if st.button("🚀 Jalankan Analisis"):
         Tabel di atas merinci bahwa semakin besar nilai n, semakin nyata beban kerja yang ditanggung sistem.</p>
     </div>
     """, unsafe_allow_html=True)
-    
