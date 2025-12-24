@@ -140,21 +140,30 @@ if st.button("🚀 Jalankan Analisis"):
     st.table(df)
 
     # 5. Analisis Dinamis
-    st.markdown("### 🧠 Analisis Kompleksitas")
+    st.markdown("### 🔍 Penjelasan Hasil Analisis")
+    
+    # Menentukan siapa yang lebih cepat secara otomatis
     pemenang = "Iteratif" if waktu_iteratif < waktu_rekursif else "Rekursif"
     
+    # Pesan sederhana berdasarkan hasil hitungan
     if n < 50:
-        pesan_performa = f"Meskipun hasil menunjukkan <b>{pemenang}</b> lebih cepat, perbedaan pada n kecil ({n}) biasanya dipengaruhi fluktuasi CPU."
+        pesan_performa = f"Untuk angka kecil seperti <b>{n}</b>, kedua cara ini sama-sama sangat cepat. Perbedaan waktunya sangat tipis sehingga hampir tidak terasa."
     else:
-        pesan_performa = f"Pada input n = {n}, algoritma <b>{pemenang}</b> mulai menunjukkan performa aslinya."
+        pesan_performa = f"Pada angka <b>{n}</b>, terlihat bahwa cara <b>{pemenang}</b> memberikan hasil yang lebih instan dibandingkan cara lainnya."
 
-    # Gunakan triple quotes tanpa spasi tak terlihat
     st.markdown(f"""
     <div class="analysis-card">
-        <h4>1. Observasi Performa</h4>
+        <h4>1. Mana yang Lebih Cepat?</h4>
         <p>{pesan_performa}</p>
-        <h4>2. Kenapa Iteratif Unggul di Skala Besar?</h4>
-        <p>Garis <b>Pink (Iteratif)</b> akan selalu lebih stabil karena menggunakan <i>Fixed Memory</i>. 
-        Sedangkan garis <b>Biru (Rekursif)</b> harus mengelola <i>Call Stack</i> yang memakan memori tambahan.</p>
+        
+        <h4>2. Mengapa Hasilnya Berbeda?</h4>
+        <p>Bayangkan kita sedang menghitung tangga:</p>
+        <ul>
+            <li><b>Cara Pink (Iteratif):</b> Seperti orang yang langsung melangkah satu per satu hingga selesai. Cara ini sangat stabil dan tidak mudah lelah meski tangganya sangat tinggi.</li>
+            <li><b>Cara Biru (Rekursif):</b> Seperti orang yang memanggil temannya untuk melangkah, lalu temannya memanggil teman lain lagi. Untuk tangga pendek ini terlihat keren, tapi jika tangganya sangat tinggi, proses "panggil-memanggil" ini membuat waktu tunggu jadi lebih lama.</li>
+        </ul>
+
+        <h4>3. Kesimpulan dari Grafik</h4>
+        <p>Perhatikan tabel dan grafik di atas. Semakin besar angka yang Anda masukkan, garis <b>Biru</b> biasanya akan mulai "ketinggalan" di atas garis <b>Pink</b>. Ini menunjukkan bahwa cara <b>Iteratif (Pink)</b> adalah metode yang lebih efisien untuk menyelesaikan tugas berat.</p>
     </div>
     """, unsafe_allow_html=True)
