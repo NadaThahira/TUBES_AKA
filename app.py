@@ -160,26 +160,20 @@ if st.button("🚀 Jalankan Analisis"):
     st.pyplot(fig)
 
     #HASIL ANALISIS (TAMBAHAN BARU)
-    st.markdown("### 🧠 Analisis Kompleksitas & Performa")
-    
-    # Menentukan algoritma mana yang lebih cepat
+    st.table(df)
+
+    # 5. Analisis Dinamis
+    st.markdown("### 🧠 Analisis Kompleksitas")
     pemenang = "Iteratif" if waktu_iteratif < waktu_rekursif else "Rekursif"
     
     st.markdown(f"""
     <div class="analysis-card">
-        <h4>1. Analisis Notasi Big-O</h4>
-        <ul>
-            <li><b>Iteratif:</b> Menggunakan satu <i>loop</i> dari 1 sampai n, sehingga kompleksitasnya adalah <b>O(n)</b>.</li>
-            <li><b>Rekursif:</b> Melakukan pemanggilan fungsi sebanyak n kali secara beruntun, kompleksitasnya juga <b>O(n)</b>.</li>
-        </ul>
-        <h4>2. Perbandingan Efisiensi</h4>
-        <p>Berdasarkan pengujian pada n = {n}, algoritma <b>{pemenang}</b> lebih efisien secara waktu.</p>
-        <ul>
-            <li><b>Iteratif</b> lebih unggul dalam penggunaan memori karena tidak menambah beban <i>stack</i> pemanggilan fungsi.</li>
-            <li><b>Rekursif</b> lebih elegan secara penulisan kode namun memiliki risiko <i>RecursionError</i> jika input terlalu besar (n > 1000).</li>
-        </ul>
-        <h4>3. Interpretasi Grafik</h4>
-        <p>Semakin ke kanan arah grafik (n bertambah besar), selisih waktu antara metode <b>Navy (Rekursif)</b> dan <b>Magenta (Iteratif)</b> akan terlihat semakin lebar. 
-        Ini membuktikan bahwa pertumbuhan beban kerja sangat berpengaruh pada performa algoritma rekursif di Python.</p>
+        <h4>1. Efisiensi Waktu Real-time</h4>
+        <p>Pada pengujian bilangan <b>{n}</b>, metode <b>{pemenang}</b> selesai lebih cepat. 
+        Meskipun keduanya memiliki kompleksitas <b>O(n)</b>, rekursi cenderung lebih lambat karena proses <i>overhead stack</i>.</p>
+        <h4>2. Kesimpulan Grafik</h4>
+        <p>Garis <b>Biru (Rekursif)</b> dan <b>Pink (Iteratif)</b> menunjukkan pertumbuhan waktu yang linier. 
+        Tabel di atas merinci bahwa semakin besar nilai n, semakin nyata beban kerja yang ditanggung sistem.</p>
     </div>
     """, unsafe_allow_html=True)
+    
