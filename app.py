@@ -46,13 +46,6 @@ st.markdown("""
         font-weight: bold !important;
         color: #FFFFFF !important;
     }
-    .analysis-card {
-        background-color: #262730;
-        padding: 20px;
-        border-radius: 10px;
-        border-left: 5px solid #FF4B4B;
-        margin-top: 20px;
-    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -102,14 +95,12 @@ if st.button("🚀 Jalankan Analisis"):
     st.markdown("### ⏱️ Waktu Eksekusi")
     col1, col2, col3 = st.columns(3)
     selisih = abs(waktu_rekursif - waktu_iteratif)
-    with col1: st.metric(label="Algoritma Iteratif", value=f"{waktu_iteratif:.6f} s")
-    with col2: st.metric(label="Algoritma Rekursif", value=f"{waktu_rekursif:.6f} s")
-    with col3: st.metric(label="Selisih Waktu", value=f"{selisih:.8f} s")
+    with col1: st.metric(label="Iteratif", value=f"{waktu_iteratif:.6f} s")
+    with col2: st.metric(label="Rekursif", value=f"{waktu_rekursif:.6f} s")
+    with col3: st.metric(label="Selisih", value=f"{selisih:.8f} s")
 
-    # 4. Pengumpulan Data untuk Grafik & Tabel
-    st.markdown("---")
-    st.markdown("### 📈 Grafik & Tabel Performa")
-    input_sizes = [1, 10, 20, 50, 100, 200, 500, 1000]
+    # 4. Pengumpulan Data untuk Grafik
+    input_sizes = [1, 10, 20, 50, 100, 200, 500, 800] # Batasi agar tidak recursion depth error
     data_points = []
 
     for ukuran in input_sizes:
@@ -118,50 +109,47 @@ if st.button("🚀 Jalankan Analisis"):
         ti = time.time() - t0
         
         t1 = time.time()
-        jumlah_faktor_genap_rekursif(ukuran, ukuran)
-        tr = time.time() - t1
+        try:
+            jumlah_faktor_genap_rekursif(ukuran, ukuran)
+            tr = time.time() - t1
+        except RecursionError:
+            tr = None
+            
         data_points.append({"n": ukuran, "Iteratif (s)": ti, "Rekursif (s)": tr})
 
     df = pd.DataFrame(data_points)
 
-    # Tampilan Grafik
+    st.markdown("### 📈 Grafik Performa")
     fig, ax = plt.subplots(figsize=(8, 4))
-    ax.plot(df["n"], df["Rekursif (s)"], marker="o", label="Rekursif", color='#3B82F6', linewidth=2)
-    ax.plot(df["n"], df["Iteratif (s)"], marker="o", label="Iteratif", color='#EC4899', linewidth=2)
-    ax.set_xlabel("Ukuran Input (n)")
-    ax.set_ylabel("Waktu (detik)")
+    ax.plot(df["n"], df["Rekursif (s)"], marker="o", label="Rekursif", color='#3B82F6')
+    ax.plot(df["n"], df["Iteratif (s)"], marker="o", label="Iteratif", color='#EC4899')
+    ax.set_ylabel("Waktu (s)")
     ax.legend()
-    ax.grid(True, linestyle='--', alpha=0.5)
     st.pyplot(fig)
 
-    # Tampilan Tabel
-    st.table(df)
-
-    # 5. ANALISIS
+    # 5. ANALISIS (BAGIAN YANG DIPERBAIKI)
     st.markdown("### 🔍 Penjelasan Hasil Analisis")
     
-    # Menentukan siapa yang lebih cepat secara otomatis
     pemenang = "Iteratif" if waktu_iteratif < waktu_rekursif else "Rekursif"
-
-    # Pesan berdasarkan hasil hitungan
+    
     if n < 50:
-        pesan_performa = f"Untuk angka kecil seperti <b>{n}</b>, kedua cara ini sama-sama sangat cepat. Perbedaan waktunya sangat tipis sehingga hampir tidak terasa."
+        pesan_performa = f"Untuk angka kecil seperti <b>{n}</b>, kedua cara ini sangat cepat. Perbedaan hampir tidak terasa."
     else:
-        pesan_performa = f"Pada angka <b>{n}</b>, terlihat bahwa cara <b>{pemenang}</b> memberikan hasil yang lebih instan dibandingkan cara lainnya."
+        pesan_performa = f"Pada angka <b>{n}</b>, cara <b>{pemenang}</b> bekerja lebih efisien."
 
-    st.markdown(f"""
-    <div style="background-color: #262730; padding: 20px; border-radius: 10px; border-left: 5px solid #FF4B4B; margin-top: 10px;">
+    # Perbaikan blok HTML Analysis
+    html_content = f"""
+    <div style="background-color: #262730; padding: 20px; border-radius: 10px; border-left: 5px solid #FF4B4B;">
         <h4 style="color: white; margin-top: 0;">1. Mana yang Lebih Cepat?</h4>
         <p style="color: #E0E0E0;">{pesan_performa}</p>
-        
         <h4 style="color: white;">2. Mengapa Hasilnya Berbeda?</h4>
-        <p style="color: #E0E0E0;">Bayangkan kita sedang menghitung tangga:</p>
+        <p style="color: #E0E0E0;">Analogi Tangga:</p>
         <ul style="color: #E0E0E0;">
-            <li><b style="color: #EC4899;">Cara Pink (Iteratif):</b> Seperti orang yang melangkah sendiri secara mandiri. Cara ini sangat stabil dan efisien meski tangganya sangat tinggi.</li>
-            <li><b style="color: #3B82F6;">Cara Biru (Rekursif):</b> Seperti orang yang harus memanggil temannya dulu sebelum melangkah. Untuk tangga pendek ini terasa mudah, tapi jika tangganya tinggi, proses panggil-memanggil ini bikin waktu tunggu lebih lama.</li>
+            <li><b style="color: #EC4899;">Iteratif:</b> Mandiri dan stabil di setiap langkah.</li>
+            <li><b style="color: #3B82F6;">Rekursif:</b> Memanggil bantuan di setiap langkah (overhead memori).</li>
         </ul>
-
-        <h4 style="color: white;">3. Kesimpulan dari Grafik</h4>
-        <p style="color: #E0E0E0;">Perhatikan grafik di atas. Semakin besar angkanya, garis <b style="color: #3B82F6;">Biru</b> biasanya akan naik lebih tinggi dibanding garis <b style="color: #EC4899;">Pink</b>. Ini artinya cara Pink (Iteratif) bekerja lebih ringan dan cepat.</p>
+        <h4 style="color: white;">3. Kesimpulan</h4>
+        <p style="color: #E0E0E0;">Garis <b style="color: #3B82F6;">Biru (Rekursif)</b> cenderung naik lebih tajam karena beban komputasi tambahan.</p>
     </div>
-    """, unsafe_allow_html=True)
+    """
+    st.markdown(html_content, unsafe_allow_html=True)
