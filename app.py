@@ -151,18 +151,20 @@ if st.button("🚀 Jalankan Analisis"):
     st.markdown("### 🧠 Analisis Kompleksitas")
     pemenang = "Iteratif" if waktu_iteratif < waktu_rekursif else "Rekursif"
     
+    # Logika untuk menjelaskan hasil yang mungkin berubah-ubah pada n kecil
+    if n < 50:
+        pesan_performa = f"""Meskipun hasil saat ini menunjukkan <b>{pemenang}</b> sedikit lebih cepat, 
+        perbedaan pada n kecil ({n}) biasanya dipengaruhi oleh fluktuasi CPU, bukan efisiensi algoritma."""
+    else:
+        pesan_performa = f"Pada input n = {n}, algoritma <b>{pemenang}</b> menunjukkan performa aslinya."
+
     st.markdown(f"""
     <div class="analysis-card">
-        <h4>1. Perbandingan Waktu Eksekusi</h4>
-        <p>Berdasarkan pengujian nyata dengan n = {n}, algoritma <b>{pemenang}</b> terbukti lebih unggul.</p>
+        <h4>1. Observasi Performa</h4>
+        <p>{pesan_performa}</p>
         
-        <h4>2. Mengapa Iteratif Lebih Unggul pada n Besar?</h4>
-        <ul>
-            <li><b>Efisiensi Memori:</b> Algoritma <b>Iteratif</b> hanya menggunakan satu blok memori untuk melakukan perulangan, sehingga waktu eksekusinya tetap stabil dan <b>cenderung lebih kecil/cepat saat n terus bertambah.</b></li>
-            <li><b>Beban Rekursi (Overhead):</b> Sebaliknya, <b>Rekursif</b> harus membuat "tumpukan" (stack) fungsi baru setiap kali memanggil dirinya sendiri. Pada nilai n yang besar, proses manajemen stack ini memakan waktu tambahan yang signifikan (overhead), sehingga grafiknya akan cenderung naik lebih tajam.</li>
-        </ul>
-
-        <h4>3. Batas Komputasi</h4>
-        <p>Pada nilai n yang sangat besar (misal n > 1000), algoritma Rekursif berisiko mengalami <i>Recursion Error</i> (Stack Overflow), sedangkan Iteratif akan terus berjalan dengan aman. Oleh karena itu, untuk penggunaan praktis dalam pengolahan data besar, metode <b>Iteratif</b> adalah pilihan yang lebih optimal.</p>
+        <h4>2. Kenapa Iteratif Unggul di Skala Besar?</h4>
+        <p>Garis <b>Pink (Iteratif)</b> akan selalu lebih stabil karena menggunakan <i>Fixed Memory</i>. 
+        Sedangkan garis <b>Biru (Rekursif)</b> harus mengelola <i>Call Stack</i>.</p>
     </div>
     """, unsafe_allow_html=True)
