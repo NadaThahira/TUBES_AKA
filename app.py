@@ -70,8 +70,8 @@ if st.button("Hitung & Bandingkan"):
         rec_times.append(time.perf_counter() - t0)
 
     fig, ax = plt.subplots()
-    ax.plot(sizes, iter_times, label="Iteratif", marker='o', color = 'pink')
-    ax.plot(sizes, rec_times, label="Rekursif", marker='s',  color = 'purple')
+    ax.plot(sizes, iter_times, label="Iteratif", marker='o', color = 'navy')
+    ax.plot(sizes, rec_times, label="Rekursif", marker='s',  color = 'magenta')
     ax.set_xlabel("Ukuran Input (n)")
     ax.set_ylabel("Waktu (detik)")
     ax.legend()
