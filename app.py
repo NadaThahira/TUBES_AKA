@@ -1,6 +1,7 @@
 import streamlit as st
 import time
 import matplotlib.pyplot as plt
+import pandas as pd
 
 # KONFIGURASI HALAMAN
 st.set_page_config(page_title="Analisis Algoritma", layout="centered")
@@ -135,18 +136,24 @@ if st.button("🚀 Jalankan Analisis"):
     st.markdown("---")
     st.markdown("### 📈 Grafik Perbandingan Running Time")
 
+    # BAGIAN PENGUMPULAN DATA 
     input_sizes = [1, 10, 20, 50, 100, 200, 500, 1000]
-    waktu_iter_list = []
-    waktu_rek_list = []
+    data_points = []
 
     for ukuran in input_sizes:
         t0 = time.time()
         jumlah_faktor_genap_iteratif(ukuran)
-        waktu_iter_list.append(time.time() - t0)
-
+        ti = time.time() - t0
+        
         t1 = time.time()
         jumlah_faktor_genap_rekursif(ukuran, ukuran)
-        waktu_rek_list.append(time.time() - t1)
+        tr = time.time() - t1
+        
+        # Menyimpan hasil ke dalam list
+        data_points.append({"n": ukuran, "Iteratif (s)": ti, "Rekursif (s)": tr})
+
+    # Membuat DataFrame (PASTIKAN baris ini sejajar dengan 'for' di atas)
+    df = pd.DataFrame(data_points)
 
     fig, ax = plt.subplots(figsize=(8, 4))
     ax.plot(input_sizes, waktu_rek_list, marker="o", label="Rekursif", color='#3B82F6', linewidth=2)
@@ -159,12 +166,10 @@ if st.button("🚀 Jalankan Analisis"):
     
     st.pyplot(fig)
 
-    #HASIL ANALISIS (TAMBAHAN BARU)
-    st.table(df)
-
-    # 5. Analisis Dinamis
+    # Analisis Dinamis
     st.markdown("### 🧠 Analisis Kompleksitas")
     pemenang = "Iteratif" if waktu_iteratif < waktu_rekursif else "Rekursif"
+    st.table(df)
     
     st.markdown(f"""
     <div class="analysis-card">
