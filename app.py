@@ -105,14 +105,16 @@ if st.button("🚀 Jalankan Analisis"):
     # ==================================================
     # GRAFIK
     # ==================================================
+   
     fig, ax = plt.subplots()
-ax.plot(input_sizes, waktu_iter, marker="o", label="Iteratif", color = 'magenta')
-ax.plot(input_sizes, waktu_rek, marker="o", label="Rekursif", color = 'navy')
-
-ax.set_xlabel("Ukuran Input (n)")
-ax.set_ylabel("Waktu Eksekusi (detik)")
-ax.set_title("Perbandingan Running Time Algoritma")
-ax.legend()
-ax.grid(True)
-
-st.pyplot(fig)
+    
+    ax.plot(input_sizes, waktu_iter, marker="o", label="Iteratif")
+    ax.plot(input_sizes, waktu_rek, marker="o", label="Rekursif")
+    
+    ax.set_xlabel("Ukuran Input (n)")
+    ax.set_ylabel("Waktu Eksekusi (detik)")
+    ax.set_title("Perbandingan Running Time Algoritma")
+    ax.legend()
+    ax.grid(True)
+    
+    st.pyplot(fig)
