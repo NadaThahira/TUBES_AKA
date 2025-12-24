@@ -3,10 +3,9 @@ import time
 import matplotlib.pyplot as plt
 import pandas as pd
 
-# KONFIGURASI HALAMAN
+# 1. KONFIGURASI HALAMAN & STYLE
 st.set_page_config(page_title="Analisis Algoritma", layout="centered")
 
-# CSS untuk tampilan visual
 st.markdown("""
     <style>
     [data-testid="stMetricLabel"] {
@@ -82,7 +81,7 @@ st.markdown("### 🔢 Input Bilangan")
 n = st.number_input("Masukkan bilangan bulat positif:", min_value=1, step=1, value=10)
 
 if st.button("🚀 Jalankan Analisis"):
-    # 1. Eksekusi Utama
+    # 1. Hitung Waktu
     start_iter = time.time()
     hasil_iteratif = jumlah_faktor_genap_iteratif(n)
     waktu_iteratif = time.time() - start_iter
@@ -91,7 +90,7 @@ if st.button("🚀 Jalankan Analisis"):
     hasil_rekursif = jumlah_faktor_genap_rekursif(n, n)
     waktu_rekursif = time.time() - start_rek
 
-    # 2. Tampilan Hasil
+    # 2. Tampilan Hasil Box
     st.markdown("### 🏁 Hasil Penjumlahan")
     col_res1, col_res2 = st.columns(2)
     with col_res1:
@@ -121,12 +120,11 @@ if st.button("🚀 Jalankan Analisis"):
         t1 = time.time()
         jumlah_faktor_genap_rekursif(ukuran, ukuran)
         tr = time.time() - t1
-        
         data_points.append({"n": ukuran, "Iteratif (s)": ti, "Rekursif (s)": tr})
 
     df = pd.DataFrame(data_points)
 
-    # Render Grafik
+    # Tampilan Grafik
     fig, ax = plt.subplots(figsize=(8, 4))
     ax.plot(df["n"], df["Rekursif (s)"], marker="o", label="Rekursif", color='#3B82F6', linewidth=2)
     ax.plot(df["n"], df["Iteratif (s)"], marker="o", label="Iteratif", color='#EC4899', linewidth=2)
@@ -136,16 +134,16 @@ if st.button("🚀 Jalankan Analisis"):
     ax.grid(True, linestyle='--', alpha=0.5)
     st.pyplot(fig)
 
-    # Render Tabel
+    # Tampilan Tabel
     st.table(df)
 
-    # 5. Analisis Dinamis
+    # 5. ANALISIS
     st.markdown("### 🔍 Penjelasan Hasil Analisis")
-    
+
     # Menentukan siapa yang lebih cepat secara otomatis
     pemenang = "Iteratif" if waktu_iteratif < waktu_rekursif else "Rekursif"
     
-    # Pesan sederhana berdasarkan hasil hitungan
+    # Pesan berdasarkan hasil hitungan
     if n < 50:
         pesan_performa = f"Untuk angka kecil seperti <b>{n}</b>, kedua cara ini sama-sama sangat cepat. Perbedaan waktunya sangat tipis sehingga hampir tidak terasa."
     else:
@@ -159,11 +157,11 @@ if st.button("🚀 Jalankan Analisis"):
         <h4>2. Mengapa Hasilnya Berbeda?</h4>
         <p>Bayangkan kita sedang menghitung tangga:</p>
         <ul>
-            <li><b>Cara Pink (Iteratif):</b> Seperti orang yang langsung melangkah satu per satu hingga selesai. Cara ini sangat stabil dan tidak mudah lelah meski tangganya sangat tinggi.</li>
-            <li><b>Cara Biru (Rekursif):</b> Seperti orang yang memanggil temannya untuk melangkah, lalu temannya memanggil teman lain lagi. Untuk tangga pendek ini terlihat keren, tapi jika tangganya sangat tinggi, proses "panggil-memanggil" ini membuat waktu tunggu jadi lebih lama.</li>
+            <li><b>Cara Pink (Iteratif):</b> Seperti orang yang langsung melangkah satu per satu hingga selesai. Cara ini sangat stabil dan efisien meski tangganya sangat tinggi.</li>
+            <li><b>Cara Biru (Rekursif):</b> Seperti orang yang memanggil temannya untuk melangkah, lalu temannya memanggil teman lain lagi. Untuk tangga pendek ini terlihat mudah, tapi jika tangganya sangat tinggi, proses "panggil-memanggil" ini membuat waktu tunggu jadi lebih lama.</li>
         </ul>
 
         <h4>3. Kesimpulan dari Grafik</h4>
-        <p>Perhatikan tabel dan grafik di atas. Semakin besar angka yang Anda masukkan, garis <b>Biru</b> biasanya akan mulai "ketinggalan" di atas garis <b>Pink</b>. Ini menunjukkan bahwa cara <b>Iteratif (Pink)</b> adalah metode yang lebih efisien untuk menyelesaikan tugas berat.</p>
+        <p>Perhatikan tabel dan grafik di atas. Semakin besar angka yang Anda masukkan, garis <b>Biru (Rekursif)</b> biasanya akan mulai naik lebih tinggi di atas garis <b>Pink (Iteratif)</b>. Ini membuktikan bahwa cara <b>Iteratif</b> bekerja lebih ringan dan cepat saat menghadapi tugas yang berat.</p>
     </div>
     """, unsafe_allow_html=True)
