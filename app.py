@@ -1,78 +1,93 @@
-
-import sys
-sys.setrecursionlimit(15000) # Menaikkan batas tumpukan memori
-
-import streamlit as st
 import time
 import matplotlib.pyplot as plt
-import sys
 
-# Meningkatkan limit rekursi untuk input yang lebih besar
-sys.setrecursionlimit(20000)
-
-# 1. Fungsi Iteratif
-def sum_even_factors_iterative(n):
+# ==================================================
+# ALGORITMA ITERATIF
+# ==================================================
+def jumlah_faktor_genap_iteratif(n):
+    """
+    Menghitung jumlah faktor genap dari n
+    menggunakan metode iteratif.
+    Kompleksitas waktu: O(n)
+    """
     total = 0
     for i in range(1, n + 1):
         if n % i == 0 and i % 2 == 0:
             total += i
     return total
 
-# 2. Fungsi Rekursif
-def sum_even_factors_recursive(n, current=1):
-    if current > n:
+
+# ==================================================
+# ALGORITMA REKURSIF
+# ==================================================
+def jumlah_faktor_genap_rekursif(n, i):
+    """
+    Menghitung jumlah faktor genap dari n
+    menggunakan metode rekursif.
+    Kompleksitas waktu: O(n)
+    """
+    if i == 0:
         return 0
-    
-    current_val = 0
-    if n % current == 0 and current % 2 == 0:
-        current_val = current
-        
-    return current_val + sum_even_factors_recursive(n, current + 1)
 
-# UI Streamlit
-st.title("Analisis Kompleksitas: Faktor Genap")
-st.write("Membandingkan efisiensi algoritma Iteratif vs Rekursif")
+    if n % i == 0 and i % 2 == 0:
+        return i + jumlah_faktor_genap_rekursif(n, i - 1)
+    else:
+        return jumlah_faktor_genap_rekursif(n, i - 1)
 
-n_input = st.number_input("Masukkan bilangan (n):", min_value=1, value=100)
 
-if st.button("Hitung & Bandingkan"):
-    # Test Iteratif
-    start_iter = time.perf_counter()
-    res_iter = sum_even_factors_iterative(n_input)
-    end_iter = time.perf_counter()
-    time_iter = end_iter - start_iter
+# ==================================================
+# ANALISIS RUNNING TIME
+# ==================================================
+def analisis_running_time():
+    # Ukuran input yang diuji
+    input_sizes = [1, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000]
 
-    # Test Rekursif
-    start_rec = time.perf_counter()
-    res_rec = sum_even_factors_recursive(n_input)
-    end_rec = time.perf_counter()
-    time_rec = end_rec - start_rec
+    waktu_iteratif = []
+    waktu_rekursif = []
 
-    col1, col2 = st.columns(2)
-    col1.metric("Iteratif (Hasil)", res_iter, f"{time_iter:.6f} s")
-    col2.metric("Rekursif (Hasil)", res_rec, f"{time_rec:.6f} s")
+    for n in input_sizes:
+        # Uji iteratif
+        start = time.time()
+        jumlah_faktor_genap_iteratif(n)
+        end = time.time()
+        waktu_iteratif.append(end - start)
 
-    # --- Simulasi Grafik Perbandingan ---
-    st.subheader("Grafik Running Time (1 sampai 2000)")
-    sizes = [1, 10, 50, 100, 500, 1000, 1500, 2000]
-    iter_times = []
-    rec_times = []
+        # Uji rekursif
+        start = time.time()
+        jumlah_faktor_genap_rekursif(n, n)
+        end = time.time()
+        waktu_rekursif.append(end - start)
 
-    for s in sizes:
-        # Iteratif time
-        t0 = time.perf_counter()
-        sum_even_factors_iterative(s)
-        iter_times.append(time.perf_counter() - t0)
-        
-        # Rekursif time
-        t0 = time.perf_counter()
-        sum_even_factors_recursive(s)
-        rec_times.append(time.perf_counter() - t0)
+    return input_sizes, waktu_iteratif, waktu_rekursif
 
-    fig, ax = plt.subplots()
-    ax.plot(sizes, iter_times, label="Iteratif", marker='o', color = 'navy')
-    ax.plot(sizes, rec_times, label="Rekursif", marker='s',  color = 'magenta')
-    ax.set_xlabel("Ukuran Input (n)")
-    ax.set_ylabel("Waktu (detik)")
-    ax.legend()
-    st.pyplot(fig)
+
+# ==================================================
+# PROGRAM UTAMA
+# ==================================================
+if __name__ == "__main__":
+    print("=== ANALISIS KOMPLEKSITAS ALGORITMA ===")
+    print("Penjumlahan Faktor Genap (Iteratif vs Rekursif)\n")
+
+    # Menjalankan analisis
+    ukuran, iteratif, rekursif = analisis_running_time()
+
+    # Menampilkan hasil dalam bentuk tabel sederhana
+    print("Ukuran Input | Iteratif (detik) | Rekursif (detik)")
+    print("-" * 50)
+    for i in range(len(ukuran)):
+        print(f"{ukuran[i]:11} | {iteratif[i]:16.6f} | {rekursif[i]:16.6f}")
+
+    # ==================================================
+    # MEMBUAT GRAFIK
+    # ==================================================
+    plt.figure()
+    plt.plot(ukuran, iteratif, label="Iteratif")
+    plt.plot(ukuran, rekursif, label="Rekursif")
+
+    plt.xlabel("Ukuran Input (n)")
+    plt.ylabel("Waktu Eksekusi (detik)")
+    plt.title("Perbandingan Running Time Algoritma")
+    plt.legend()
+    plt.grid(True)
+
+    plt.show()
