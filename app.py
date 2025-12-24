@@ -74,15 +74,55 @@ if st.button("🚀 Jalankan Analisis"):
     # ==================================================
     # OUTPUT HASIL
     # ==================================================
-    st.markdown("### 📌 Hasil Perhitungan")
-    st.write(f"**Jumlah faktor genap (Iteratif):** {hasil_iteratif}")
-    st.write(f"**Jumlah faktor genap (Rekursif):** {hasil_rekursif}")
+    st.markdown("## 🧮 Hasil Perhitungan")
+    st.info(f"Jumlah faktor genap dari bilangan **{n}** adalah **{hasil_iteratif}**")
+    
+    st.markdown("## ⏱️ Perbandingan Waktu Eksekusi")
 
-    st.markdown("### ⏱️ Waktu Eksekusi")
-    st.write(f"Iteratif: `{waktu_iteratif:.6f}` detik")
-    st.write(f"Rekursif: `{waktu_rekursif:.6f}` detik")
-
-    st.markdown("---")
+    col1, col2, col3 = st.columns(3)
+    
+    selisih_waktu = abs(waktu_rekursif - waktu_iteratif)
+    
+    with col1:
+        st.metric(
+            label="Algoritma Iteratif",
+            value=f"{waktu_iteratif:.6f} detik"
+        )
+    
+    with col2:
+        st.metric(
+            label="Algoritma Rekursif",
+            value=f"{waktu_rekursif:.6f} detik"
+        )
+    
+    with col3:
+        st.metric(
+            label="Selisih Waktu",
+            value=f"{selisih_waktu:.6f} detik"
+        )
+    
+    # --------------------------------------------------
+    # KESIMPULAN OTOMATIS
+    # --------------------------------------------------
+    st.markdown("## 🧠 Kesimpulan Otomatis")
+    
+    if waktu_iteratif < waktu_rekursif:
+        st.success(
+            "Algoritma **Iteratif** memiliki waktu eksekusi lebih cepat "
+            "dibandingkan algoritma Rekursif pada pengujian ini."
+        )
+    elif waktu_iteratif > waktu_rekursif:
+        st.warning(
+            "Algoritma **Rekursif** memiliki waktu eksekusi lebih cepat "
+            "dibandingkan algoritma Iteratif pada pengujian ini."
+        )
+    else:
+        st.info(
+            "Kedua algoritma memiliki waktu eksekusi yang hampir sama "
+            "pada pengujian ini."
+        )
+    
+        st.markdown("---")
 
     # ==================================================
     # ANALISIS RUNNING TIME UNTUK BERBAGAI INPUT
@@ -108,8 +148,8 @@ if st.button("🚀 Jalankan Analisis"):
    
     fig, ax = plt.subplots()
     
-    ax.plot(input_sizes, waktu_iter, marker="o", label="Iteratif")
-    ax.plot(input_sizes, waktu_rek, marker="o", label="Rekursif")
+    ax.plot(input_sizes, waktu_iter, marker="o", label="Iteratif", color = 'magenta')
+    ax.plot(input_sizes, waktu_rek, marker="o", label="Rekursif", color = 'navy')
     
     ax.set_xlabel("Ukuran Input (n)")
     ax.set_ylabel("Waktu Eksekusi (detik)")
