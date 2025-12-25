@@ -77,7 +77,7 @@ st.markdown("### 🔢 Input Bilangan")
 n = st.number_input("Masukkan bilangan bulat positif:", min_value=1, step=1, value=10)
 
 if st.button("🚀 Jalankan Analisis"):
-    # --- PROSES PERHITUNGAN ---
+    # --- PROSES PERHITUNGAN UTAMA ---
     start_iter = time.time()
     hasil_iteratif = jumlah_faktor_genap_iteratif(n)
     waktu_iteratif = time.time() - start_iter
@@ -102,103 +102,103 @@ if st.button("🚀 Jalankan Analisis"):
     with col2: st.metric(label="Rekursif", value=f"{waktu_rekursif:.6f} s")
     with col3: st.metric(label="Selisih", value=f"{selisih:.8f} s")
 
-    # --- GRAFIK PERFORMA ---
+    # --- PENGUMPULAN DATA UNTUK GRAFIK & TABEL KENAIKAN ---
     st.markdown("---")
-    st.markdown("### 📈 Grafik Performa")
-    input_sizes = [1, 10, 20, 50, 100, 200, 500, 800] 
+    st.markdown("### 📈 Grafik & Tabel Performa")
+    
+    # Ukuran input sampel untuk melihat trend kenaikan
+    input_sizes = [10, 50, 100, 200, 400, 600, 800, 1000] 
     data_points = []
 
     for ukuran in input_sizes:
+        # Hitung Iteratif
         t0 = time.time()
         jumlah_faktor_genap_iteratif(ukuran)
         ti = time.time() - t0
         
+        # Hitung Rekursif
         t1 = time.time()
         try:
+            # Batasi rekursif untuk n sangat besar agar tidak crash
             jumlah_faktor_genap_rekursif(ukuran, ukuran)
             tr = time.time() - t1
         except RecursionError:
             tr = None
             
-        data_points.append({"n": ukuran, "Iteratif (s)": ti, "Rekursif (s)": tr})
+        data_points.append({
+            "Nilai N": ukuran, 
+            "Waktu Iteratif (s)": f"{ti:.8f}", 
+            "Waktu Rekursif (s)": f"{tr:.8f}" if tr is not None else "N/A"
+        })
 
     df = pd.DataFrame(data_points)
+
+    # Menampilkan Grafik
     fig, ax = plt.subplots(figsize=(8, 4))
-    ax.plot(df["n"], df["Rekursif (s)"], marker="o", label="Rekursif", color='#3B82F6', linewidth=2)
-    ax.plot(df["n"], df["Iteratif (s)"], marker="o", label="Iteratif", color='#EC4899', linewidth=2)
+    # Konversi kembali ke float untuk plotting
+    ax.plot(df["Nilai N"], df["Waktu Rekursif (s)"].replace("N/A", 0).astype(float), marker="o", label="Rekursif", color='#3B82F6')
+    ax.plot(df["Nilai N"], df["Waktu Iteratif (s)"].astype(float), marker="o", label="Iteratif", color='#EC4899')
     ax.set_ylabel("Waktu (detik)")
-    ax.set_xlabel("Nilai N")
+    ax.set_xlabel("Ukuran Input (N)")
     ax.legend()
     ax.grid(True, linestyle='--', alpha=0.5)
     st.pyplot(fig)
 
-    # --- DETAIL DATA ---
+    # Menampilkan Tabel Kenaikan Data Grafik
+    st.markdown("#### 📋 Tabel Detail Kenaikan Waktu")
+    st.dataframe(df, use_container_width=True)
+
+    # --- DETAIL DATA FAKTOR ---
     st.markdown("---")
-    st.markdown("### 📋 Detail Data")
+    st.markdown("### 📂 Daftar Faktor Genap")
     faktor_genap = [i for i in range(1, n + 1) if n % i == 0 and i % 2 == 0]
-    jumlah_faktor = len(faktor_genap)
-    st.write(f"Ditemukan **{jumlah_faktor}** faktor genap dari angka **{n}**.")
+    st.write(f"Ditemukan **{len(faktor_genap)}** faktor genap dari angka **{n}**.")
     
-    if jumlah_faktor > 0:
+    if faktor_genap:
         teks_faktor = ", ".join(map(str, faktor_genap))
         st.markdown(f"""
-            <div style="background-color: rgba(151, 166, 195, 0.1); padding: 20px; border-radius: 10px; border: 1px solid #464b5d;">
-                <code style="color: var(--text-color); font-size: 1.2rem; font-weight: bold;">{teks_faktor}</code>
+            <div style="background-color: rgba(151, 166, 195, 0.1); padding: 15px; border-radius: 10px; border: 1px solid #464b5d;">
+                <code style="color: var(--text-color); font-size: 1.1rem; font-weight: bold;">{teks_faktor}</code>
             </div>
         """, unsafe_allow_html=True)
     else:
-        st.info("Tidak ada faktor genap ditemukan.")
+        st.info("Tidak ada faktor genap.")
 
-    # --- LOGIKA ANALISIS KOMPLEKSITAS ---
+    # --- BAGIAN ANALISIS KOMPLEKSITAS ---
     pemenang = "Iteratif" if waktu_iteratif < waktu_rekursif else "Rekursif"
-    if n < 50:
-        pesan_performa = f"Untuk angka kecil seperti <b>{n}</b>, kedua cara ini sangat cepat. Perbedaan hampir tidak terasa."
-    else:
-        pesan_performa = f"Pada angka <b>{n}</b>, cara <b>{pemenang}</b> bekerja lebih efisien."
+    pesan_performa = f"Pada input <b>{n}</b>, metode <b>{pemenang}</b> terbukti lebih efisien."
 
-    # --- BAGIAN TAB: ANALISIS & KODE ---
     st.markdown("---")
     tab1, tab2 = st.tabs(["📝 Kesimpulan Analisis", "💻 Kode Algoritma"])
 
     with tab1:
         st.markdown(f"""
         <div class="info-container">
-            <h4 style="color: var(--text-color); margin-top: 0;">1. Mana yang Lebih Cepat?</h4>
+            <h4 style="color: var(--text-color); margin-top: 0;">Analisis Efisiensi</h4>
             <p style="color: var(--text-color);">{pesan_performa}</p>
         </div>
-        <h4>📊 Kelas Kompleksitas</h4>
         """, unsafe_allow_html=True)
         
-        # Tabel Kompleksitas
+        # Tabel Big O
         df_comp = pd.DataFrame({
-            "Aspek": ["Time Complexity", "Space Complexity", "Efisiensi"],
-            "Iteratif": ["O(n)", "O(1)", "Tinggi"],
-            "Rekursif": ["O(n)", "O(n)", "Rendah (Stack Overhead)"]
+            "Metode": ["Iteratif", "Rekursif"],
+            "Time Complexity": ["O(n)", "O(n)"],
+            "Space Complexity": ["O(1)", "O(n)"],
+            "Stabilitas": ["Sangat Stabil", "Kurang (Stack Overhead)"]
         })
         st.table(df_comp)
 
-        st.markdown(f"""
-        <div style="background-color: rgba(151, 166, 195, 0.05); padding: 15px; border-radius: 10px; border: 1px dashed #888;">
-            <p style="color: var(--text-color); font-size: 0.9rem;">
-                <b>Penjelasan:</b> Meskipun keduanya linear <b>O(n)</b>, rekursif membutuhkan ruang memori tambahan untuk menyimpan setiap tumpukan fungsi (<i>call stack</i>), sehingga cenderung lebih lambat pada input besar.
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
-
     with tab2:
         st.code(f"""
-# Algoritma Iteratif
-def iteratif(n):
-    total = 0
-    for i in range(1, n + 1):
-        if n % i == 0 and i % 2 == 0:
-            total += i
-    return total
+# Versi Iteratif
+for i in range(1, n + 1):
+    if n % i == 0 and i % 2 == 0:
+        total += i
 
-# Algoritma Rekursif
-def rekursif(n, i):
+# Versi Rekursif
+def logic(n, i):
     if i <= 0: return 0
     if n % i == 0 and i % 2 == 0:
-        return i + rekursif(n, i - 1)
-    return rekursif(n, i - 1)
+        return i + logic(n, i - 1)
+    return logic(n, i - 1)
         """, language="python")
