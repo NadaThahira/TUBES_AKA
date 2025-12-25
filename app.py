@@ -137,7 +137,6 @@ if st.button("🚀 Jalankan Analisis"):
     else:
         pesan_performa = f"Pada angka <b>{n}</b>, cara <b>{pemenang}</b> bekerja lebih efisien."
 
-    # Perbaikan blok HTML Analysis
     html_content = f"""
     <div style="background-color: #262730; padding: 20px; border-radius: 10px; border-left: 5px solid #FF4B4B;">
         <h4 style="color: white; margin-top: 0;">1. Manakah yang memiliki waktu eksekusi lebih cepat?</h4>
@@ -152,3 +151,30 @@ if st.button("🚀 Jalankan Analisis"):
     </div>
     """
     st.markdown(html_content, unsafe_allow_html=True)
+
+    # 6. DETAIL DATA (Daftar Faktor Genap)
+    st.markdown("---")
+    st.markdown("### 📋 Detail Data")
+    
+    # Mencari daftar faktor genap
+    faktor_genap = [i for i in range(1, n + 1) if n % i == 0 and i % 2 == 0]
+    jumlah_faktor = len(faktor_genap)
+    
+    st.write(f"Ditemukan **{jumlah_faktor}** faktor genap dari angka **{n}**.")
+    
+    if jumlah_faktor > 0:
+        # Menampilkan daftar angka dalam kotak
+        # Menggunakan join untuk mengubah list menjadi string "2, 6, 86, 258"
+        teks_faktor = ", ".join(map(str, faktor_genap))
+        st.markdown(f"""
+            <div style="background-color: #1E1E1E; padding: 20px; border-radius: 10px; border: 1px solid #333; margin-top: 10px;">
+                <code style="color: white; font-size: 1.2rem;">{teks_faktor}</code>
+            </div>
+        """, unsafe_allow_html=True)
+    else:
+        # Tampilan jika tidak ada faktor genap (untuk angka ganjil)
+        st.markdown(f"""
+            <div style="background-color: #1E1E1E; padding: 20px; border-radius: 10px; border: 1px solid #333; margin-top: 10px;">
+                <i style="color: #888;">Tidak ada faktor genap</i>
+            </div>
+        """, unsafe_allow_html=True)
