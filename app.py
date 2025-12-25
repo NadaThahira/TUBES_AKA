@@ -178,3 +178,59 @@ if st.button("🚀 Jalankan Analisis"):
                 <i style="color: #888;">Tidak ada faktor genap</i>
             </div>
         """, unsafe_allow_html=True)
+
+    # --- BAGIAN TAB: KESIMPULAN & KODE ---
+    st.markdown("---")
+    tab1, tab2 = st.tabs(["📝 Kesimpulan Analisis", "💻 Kode Algoritma"])
+
+    with tab1:
+        # Pindahkan blok penjelasan analisis kamu ke sini
+        st.markdown(f"""
+        <div style="background-color: #262730; padding: 20px; border-radius: 10px; border-left: 5px solid #FF4B4B;">
+            <h4 style="color: white; margin-top: 0;">1. Mana yang Lebih Cepat?</h4>
+            <p style="color: #E0E0E0;">{pesan_performa}</p>
+            <h4 style="color: white;">2. Mengapa Hasilnya Berbeda?</h4>
+            <ul style="color: #E0E0E0;">
+                <li><b style="color: #EC4899;">Iteratif:</b> Efisien dan stabil untuk input besar.</li>
+                <li><b style="color: #3B82F6;">Rekursif:</b> Memiliki overhead pemanggilan fungsi (stack).</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with tab2:
+        # Menampilkan potongan kode seperti di screenshot
+        st.code(f"""
+    # Versi Iteratif
+    for i in range(1, n + 1):
+        if n % i == 0 and i % 2 == 0:
+            total += i
+    
+    # Versi Rekursif
+    def logic(n, curr):
+        if curr > n: return 0
+        # ... call logic(n, curr + 1)
+            """, language="python")
+
+    # --- BAGIAN DETAIL DATA ---
+    st.markdown("### 📋 Detail Data")
+    
+    # Mencari daftar faktor genap
+    faktor_genap = [i for i in range(1, n + 1) if n % i == 0 and i % 2 == 0]
+    jumlah_faktor = len(faktor_genap)
+    
+    st.write(f"Ditemukan **{jumlah_faktor}** faktor genap dari angka **{n}**.")
+    
+    # Box untuk daftar angka
+    if jumlah_faktor > 0:
+        teks_angka = ", ".join(map(str, faktor_genap))
+        st.markdown(f"""
+            <div style="background-color: #161b22; padding: 20px; border-radius: 10px; border: 1px solid #30363d;">
+                <span style="color: white; font-family: monospace; font-size: 1.1rem;">{teks_angka}</span>
+            </div>
+        """, unsafe_allow_html=True)
+    else:
+        st.markdown(f"""
+            <div style="background-color: #161b22; padding: 20px; border-radius: 10px; border: 1px solid #30363d;">
+                <span style="color: #8b949e; font-style: italic;">Tidak ada faktor genap</span>
+            </div>
+        """, unsafe_allow_html=True)
