@@ -100,7 +100,7 @@ if st.button("🚀 Jalankan Analisis"):
     with col3: st.metric(label="Selisih", value=f"{selisih:.8f} s")
 
     # 4. Pengumpulan Data untuk Grafik
-    input_sizes = [1, 10, 20, 50, 100, 200, 500, 800] # Batasi agar tidak recursion depth error
+    input_sizes = [1, 10, 20, 50, 100, 200, 500, 800] 
     data_points = []
 
     for ukuran in input_sizes:
@@ -127,63 +127,52 @@ if st.button("🚀 Jalankan Analisis"):
     ax.legend()
     st.pyplot(fig)
 
-    # DETAIL DATA (Daftar Faktor Genap)
+    # 5. DETAIL DATA
     st.markdown("---")
     st.markdown("### 📋 Detail Data")
-    
-    # Mencari daftar faktor genap
     faktor_genap = [i for i in range(1, n + 1) if n % i == 0 and i % 2 == 0]
     jumlah_faktor = len(faktor_genap)
-    
     st.write(f"Ditemukan **{jumlah_faktor}** faktor genap dari angka **{n}**.")
     
     if jumlah_faktor > 0:
-        # Menampilkan daftar angka dalam kotak
-        # Menggunakan join untuk mengubah list menjadi string "2, 6, 86, 258"
         teks_faktor = ", ".join(map(str, faktor_genap))
-        st.markdown(f"""
-            <div style="background-color: #1E1E1E; padding: 20px; border-radius: 10px; border: 1px solid #333; margin-top: 10px;">
-                <code style="color: white; font-size: 1.2rem;">{teks_faktor}</code>
-            </div>
-        """, unsafe_allow_html=True)
+        st.markdown(f'<div style="background-color: #1E1E1E; padding: 20px; border-radius: 10px; border: 1px solid #333;"><code style="color: white; font-size: 1.2rem;">{teks_faktor}</code></div>', unsafe_allow_html=True)
     else:
-        # Tampilan jika tidak ada faktor genap (untuk angka ganjil)
-        st.markdown(f"""
-            <div style="background-color: #1E1E1E; padding: 20px; border-radius: 10px; border: 1px solid #333; margin-top: 10px;">
-                <i style="color: #888;">Tidak ada faktor genap</i>
-            </div>
-        """, unsafe_allow_html=True)
+        st.markdown(f'<div style="background-color: #1E1E1E; padding: 20px; border-radius: 10px; border: 1px solid #333;"><i style="color: #888;">Tidak ada faktor genap</i></div>', unsafe_allow_html=True)
 
-    # BAGIAN TAB: KESIMPULAN & KODE
+    # 6. LOGIKA PESAN PERFORMA (DITAMBAHKAN AGAR TIDAK ERROR)
+    pemenang = "Iteratif" if waktu_iteratif < waktu_rekursif else "Rekursif"
+    if n < 50:
+        pesan_performa = f"Untuk angka kecil seperti <b>{n}</b>, kedua cara ini sangat cepat. Perbedaan hampir tidak terasa."
+    else:
+        pesan_performa = f"Pada angka <b>{n}</b>, cara <b>{pemenang}</b> bekerja lebih efisien."
+
+    # 7. BAGIAN TAB
     st.markdown("---")
     tab1, tab2 = st.tabs(["📝 Kesimpulan Analisis", "💻 Kode Algoritma"])
 
     with tab1:
-        # Pindahkan blok penjelasan analisis kamu ke sini
         st.markdown(f"""
         <div style="background-color: #262730; padding: 20px; border-radius: 10px; border-left: 5px solid #FF4B4B;">
-            <h4 style="color: white; margin-top: 0;">1. Mana yang Lebih Cepat? Manakah yang memiliki waktu eksekusi lebih cepat?</h4>
+            <h4 style="color: white; margin-top: 0;">1. Mana yang Lebih Cepat?</h4>
             <p style="color: #E0E0E0;">{pesan_performa}</p>
-            <h4 style="color: white;">2. Apa penyebab perbedaan hasil yang diperoleh?</h4>
+            <h4 style="color: white;">2. Apa penyebab perbedaan hasil?</h4>
             <ul style="color: #E0E0E0;">
-                <li><b style="color: #EC4899;">Iteratif:</b> Proses berjalan langsung dengan perulangan.</li>
-                <li><b style="color: #3B82F6;">Rekursif:</b> Proses berjalan dengan pemanggilan fungsi berulang sehingga membutuhkan lebih banyak memori.</li>
+                <li><b style="color: #EC4899;">Iteratif:</b> Menggunakan perulangan (loop) yang hemat memori.</li>
+                <li><b style="color: #3B82F6;">Rekursif:</b> Memanggil dirinya sendiri, menambah beban pada stack memori.</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
 
-    
-
     with tab2:
-        # Menampilkan potongan kode seperti di screenshot
         st.code(f"""
-    # Versi Iteratif
-    for i in range(1, n + 1):
-        if n % i == 0 and i % 2 == 0:
-            total += i
-    
-    # Versi Rekursif
-    def logic(n, curr):
-        if curr > n: return 0
-        # ... call logic(n, curr + 1)
-            """, language="python")
+# Versi Iteratif
+for i in range(1, n + 1):
+    if n % i == 0 and i % 2 == 0:
+        total += i
+
+# Versi Rekursif
+def logic(n, curr):
+    if curr > n: return 0
+    # ... call logic(n, curr + 1)
+        """, language="python")
