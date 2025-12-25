@@ -6,17 +6,14 @@ import pandas as pd
 # 1. KONFIGURASI HALAMAN & STYLE
 st.set_page_config(page_title="Analisis Algoritma", layout="centered")
 
+# CSS Adaptif untuk mendukung Light & Dark Mode
 st.markdown("""
     <style>
     [data-testid="stMetricLabel"] {
-        font-size: 1.5rem !important;
+        font-size: 1.2rem !important;
         font-weight: 800 !important;
         color: #FF4B4B !important; 
         text-transform: uppercase;
-    }
-    [data-testid="stMetricValue"] {
-        font-size: 2rem !important;
-        font-weight: bold !important;
     }
     .result-box {
         padding: 25px;
@@ -35,16 +32,22 @@ st.markdown("""
     }
     .label-text {
         margin: 0;
-        font-size: 1.8rem !important;
+        font-size: 1.5rem !important;
         font-weight: 900 !important;
         color: #FFFFFF !important;
-        letter-spacing: 2px;
     }
     .value-text {
         margin: 0;
-        font-size: 3rem !important;
+        font-size: 2.5rem !important;
         font-weight: bold !important;
         color: #FFFFFF !important;
+    }
+    .info-container {
+        background-color: rgba(151, 166, 195, 0.1);
+        padding: 20px;
+        border-radius: 10px;
+        border-left: 5px solid #FF4B4B;
+        margin-bottom: 20px;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -53,7 +56,7 @@ st.title("📊 Analisis Kompleksitas Algoritma")
 st.subheader("Penjumlahan Faktor Genap (Iteratif vs Rekursif)")
 st.markdown("---")
 
-# ALGORITMA
+# 2. DEFINISI ALGORITMA
 def jumlah_faktor_genap_iteratif(n):
     total = 0
     for i in range(1, n + 1):
@@ -69,12 +72,12 @@ def jumlah_faktor_genap_rekursif(n, i):
     else:
         return jumlah_faktor_genap_rekursif(n, i - 1)
 
-# INPUT USER
+# 3. INPUT USER
 st.markdown("### 🔢 Input Bilangan")
 n = st.number_input("Masukkan bilangan bulat positif:", min_value=1, step=1, value=10)
 
 if st.button("🚀 Jalankan Analisis"):
-    # 1. Hitung Waktu
+    # --- PROSES PERHITUNGAN ---
     start_iter = time.time()
     hasil_iteratif = jumlah_faktor_genap_iteratif(n)
     waktu_iteratif = time.time() - start_iter
@@ -83,7 +86,7 @@ if st.button("🚀 Jalankan Analisis"):
     hasil_rekursif = jumlah_faktor_genap_rekursif(n, n)
     waktu_rekursif = time.time() - start_rek
 
-    # 2. Tampilan Hasil Box
+    # --- TAMPILAN HASIL BOX ---
     st.markdown("### 🏁 Hasil Penjumlahan")
     col_res1, col_res2 = st.columns(2)
     with col_res1:
@@ -91,7 +94,7 @@ if st.button("🚀 Jalankan Analisis"):
     with col_res2:
         st.markdown(f'<div class="result-box iteratif-box"><p class="label-text">ITERATIF</p><p class="value-text">{hasil_iteratif}</p></div>', unsafe_allow_html=True)
 
-    # 3. Metrik Waktu
+    # --- METRIK WAKTU ---
     st.markdown("### ⏱️ Waktu Eksekusi")
     col1, col2, col3 = st.columns(3)
     selisih = abs(waktu_rekursif - waktu_iteratif)
@@ -99,7 +102,9 @@ if st.button("🚀 Jalankan Analisis"):
     with col2: st.metric(label="Rekursif", value=f"{waktu_rekursif:.6f} s")
     with col3: st.metric(label="Selisih", value=f"{selisih:.8f} s")
 
-    # 4. Pengumpulan Data untuk Grafik
+    # --- GRAFIK PERFORMA ---
+    st.markdown("---")
+    st.markdown("### 📈 Grafik Performa")
     input_sizes = [1, 10, 20, 50, 100, 200, 500, 800] 
     data_points = []
 
@@ -118,16 +123,16 @@ if st.button("🚀 Jalankan Analisis"):
         data_points.append({"n": ukuran, "Iteratif (s)": ti, "Rekursif (s)": tr})
 
     df = pd.DataFrame(data_points)
-
-    st.markdown("### 📈 Grafik Performa")
     fig, ax = plt.subplots(figsize=(8, 4))
-    ax.plot(df["n"], df["Rekursif (s)"], marker="o", label="Rekursif", color='#3B82F6')
-    ax.plot(df["n"], df["Iteratif (s)"], marker="o", label="Iteratif", color='#EC4899')
-    ax.set_ylabel("Waktu (s)")
+    ax.plot(df["n"], df["Rekursif (s)"], marker="o", label="Rekursif", color='#3B82F6', linewidth=2)
+    ax.plot(df["n"], df["Iteratif (s)"], marker="o", label="Iteratif", color='#EC4899', linewidth=2)
+    ax.set_ylabel("Waktu (detik)")
+    ax.set_xlabel("Nilai N")
     ax.legend()
+    ax.grid(True, linestyle='--', alpha=0.5)
     st.pyplot(fig)
 
-    # 5. DETAIL DATA
+    # --- DETAIL DATA ---
     st.markdown("---")
     st.markdown("### 📋 Detail Data")
     faktor_genap = [i for i in range(1, n + 1) if n % i == 0 and i % 2 == 0]
@@ -136,43 +141,64 @@ if st.button("🚀 Jalankan Analisis"):
     
     if jumlah_faktor > 0:
         teks_faktor = ", ".join(map(str, faktor_genap))
-        st.markdown(f'<div style="background-color: #1E1E1E; padding: 20px; border-radius: 10px; border: 1px solid #333;"><code style="color: white; font-size: 1.2rem;">{teks_faktor}</code></div>', unsafe_allow_html=True)
+        st.markdown(f"""
+            <div style="background-color: rgba(151, 166, 195, 0.1); padding: 20px; border-radius: 10px; border: 1px solid #464b5d;">
+                <code style="color: var(--text-color); font-size: 1.2rem; font-weight: bold;">{teks_faktor}</code>
+            </div>
+        """, unsafe_allow_html=True)
     else:
-        st.markdown(f'<div style="background-color: #1E1E1E; padding: 20px; border-radius: 10px; border: 1px solid #333;"><i style="color: #888;">Tidak ada faktor genap</i></div>', unsafe_allow_html=True)
+        st.info("Tidak ada faktor genap ditemukan.")
 
-    # 6. LOGIKA PESAN PERFORMA (DITAMBAHKAN AGAR TIDAK ERROR)
+    # --- LOGIKA ANALISIS KOMPLEKSITAS ---
     pemenang = "Iteratif" if waktu_iteratif < waktu_rekursif else "Rekursif"
     if n < 50:
         pesan_performa = f"Untuk angka kecil seperti <b>{n}</b>, kedua cara ini sangat cepat. Perbedaan hampir tidak terasa."
     else:
         pesan_performa = f"Pada angka <b>{n}</b>, cara <b>{pemenang}</b> bekerja lebih efisien."
 
-    # 7. BAGIAN TAB
+    # --- BAGIAN TAB: ANALISIS & KODE ---
     st.markdown("---")
     tab1, tab2 = st.tabs(["📝 Kesimpulan Analisis", "💻 Kode Algoritma"])
 
     with tab1:
         st.markdown(f"""
-        <div style="background-color: #262730; padding: 20px; border-radius: 10px; border-left: 5px solid #FF4B4B;">
-            <h4 style="color: white; margin-top: 0;">1. Manakah yang memiliki waktu eksekusi lebih cepat?</h4>
-            <p style="color: #E0E0E0;">{pesan_performa}</p>
-            <h4 style="color: white;">2. Apa penyebab perbedaan hasil yang diperoleh?</h4>
-            <ul style="color: #E0E0E0;">
-                <li><b style="color: #EC4899;">Iteratif:</b> Proses berjalan hanya menggunakan satu jalur proses perulangan. Sangat stabil untuk angka besar.</li>
-                <li><b style="color: #3B82F6;">Rekursif:</b> Proses berjalan dengan memanggil fungsi dirinya sendiri secara berulang sehingga membutuhkan lebih banyak memori.</li>
-            </ul>
+        <div class="info-container">
+            <h4 style="color: var(--text-color); margin-top: 0;">1. Mana yang Lebih Cepat?</h4>
+            <p style="color: var(--text-color);">{pesan_performa}</p>
+        </div>
+        <h4>📊 Kelas Kompleksitas</h4>
+        """, unsafe_allow_html=True)
+        
+        # Tabel Kompleksitas
+        df_comp = pd.DataFrame({
+            "Aspek": ["Time Complexity", "Space Complexity", "Efisiensi"],
+            "Iteratif": ["O(n)", "O(1)", "Tinggi"],
+            "Rekursif": ["O(n)", "O(n)", "Rendah (Stack Overhead)"]
+        })
+        st.table(df_comp)
+
+        st.markdown(f"""
+        <div style="background-color: rgba(151, 166, 195, 0.05); padding: 15px; border-radius: 10px; border: 1px dashed #888;">
+            <p style="color: var(--text-color); font-size: 0.9rem;">
+                <b>Penjelasan:</b> Meskipun keduanya linear <b>O(n)</b>, rekursif membutuhkan ruang memori tambahan untuk menyimpan setiap tumpukan fungsi (<i>call stack</i>), sehingga cenderung lebih lambat pada input besar.
+            </p>
         </div>
         """, unsafe_allow_html=True)
 
     with tab2:
         st.code(f"""
-# Versi Iteratif
-for i in range(1, n + 1):
-    if n % i == 0 and i % 2 == 0:
-        total += i
+# Algoritma Iteratif
+def iteratif(n):
+    total = 0
+    for i in range(1, n + 1):
+        if n % i == 0 and i % 2 == 0:
+            total += i
+    return total
 
-# Versi Rekursif
-def logic(n, curr):
-    if curr > n: return 0
-    # ... call logic(n, curr + 1)
+# Algoritma Rekursif
+def rekursif(n, i):
+    if i <= 0: return 0
+    if n % i == 0 and i % 2 == 0:
+        return i + rekursif(n, i - 1)
+    return rekursif(n, i - 1)
         """, language="python")
