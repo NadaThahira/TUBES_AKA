@@ -154,12 +154,12 @@ if st.button("🚀 Jalankan Analisis"):
     with tab1:
         st.markdown(f"""
         <div style="background-color: #262730; padding: 20px; border-radius: 10px; border-left: 5px solid #FF4B4B;">
-            <h4 style="color: white; margin-top: 0;">1. Mana yang Lebih Cepat?</h4>
+            <h4 style="color: white; margin-top: 0;">1. Manakah yang memiliki waktu eksekusi lebih cepat?</h4>
             <p style="color: #E0E0E0;">{pesan_performa}</p>
-            <h4 style="color: white;">2. Apa penyebab perbedaan hasil?</h4>
+            <h4 style="color: white;">2. Apa penyebab perbedaan hasil yang diperoleh?</h4>
             <ul style="color: #E0E0E0;">
-                <li><b style="color: #EC4899;">Iteratif:</b> Menggunakan perulangan (loop) yang hemat memori.</li>
-                <li><b style="color: #3B82F6;">Rekursif:</b> Memanggil dirinya sendiri, menambah beban pada stack memori.</li>
+                <li><b style="color: #EC4899;">Iteratif:</b> Proses berjalan langsung dengan perulangan.</li>
+                <li><b style="color: #3B82F6;">Rekursif:</b> Proses berjalan dengan pemanggilan fungsi berulang sehingga membutuhkan lebih banyak memori.</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
