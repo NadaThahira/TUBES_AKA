@@ -36,7 +36,3 @@ Jumlah faktor genap = 24
 - Kompleksitas waktu: O(n)
 - Memiliki overhead pemanggilan fungsi
 
-## Anggota
-- **Mutiara Zahra**            1003052400010
-- **Salwa Nabilah Nur Bahri**  103052400013
-- **Nada Thahira Sosa**        103052400049
