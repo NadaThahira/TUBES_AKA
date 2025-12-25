@@ -158,8 +158,8 @@ if st.button("🚀 Jalankan Analisis"):
             <p style="color: #E0E0E0;">{pesan_performa}</p>
             <h4 style="color: white;">2. Apa penyebab perbedaan hasil yang diperoleh?</h4>
             <ul style="color: #E0E0E0;">
-                <li><b style="color: #EC4899;">Iteratif:</b> Proses berjalan langsung dengan perulangan.</li>
-                <li><b style="color: #3B82F6;">Rekursif:</b> Proses berjalan dengan pemanggilan fungsi berulang sehingga membutuhkan lebih banyak memori.</li>
+                <li><b style="color: #EC4899;">Iteratif:</b> Proses berjalan hanya menggunakan satu jalur proses perulangan. Sangat stabil untuk angka besar.</li>
+                <li><b style="color: #3B82F6;">Rekursif:</b> Proses berjalan dengan memanggil fungsi dirinya sendiri secara berulang sehingga membutuhkan lebih banyak memori.</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
